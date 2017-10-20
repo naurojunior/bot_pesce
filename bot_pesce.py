@@ -1,4 +1,5 @@
 import config
+import config_resp
 import praw
 import time
 import os
@@ -17,11 +18,17 @@ def bot_login():
 def run_bot(r, comments_replied):
 	word = ""
 	
+	for submission in r.subreddit('test').hot(limit=25):
+		if any(word in submission.selftext for word in config_resp.palavras_chave) and submission.id not in comments_replied:
+			submission.reply(get_reply())
+			comments_replied.append(submission.id)
+			
+			with open("comments_replied.txt", "a") as fw:
+				fw.write(submission.id + ",")
+	
 	for comment in r.subreddit('test').comments(limit=25):
-		if any(word in comment.body for word in config.palavras_chave) and comment.id not in comments_replied: # and comment.author != r.user.me():
-			print ("Comment found")
-			#comment.reply("")
-			print ("Replied: " + get_reply())
+		if any(word in comment.body for word in config_resp.palavras_chave) and comment.id not in comments_replied and comment.author != r.user.me():
+			comment.reply(get_reply())
 			comments_replied.append(comment.id)
 			
 			with open("comments_replied.txt", "a") as fw:
@@ -39,27 +46,26 @@ def load_comments():
 
 	
 def get_diplomas():
-	qnt_diplomas = random.randrange(1,len(config.diplomas) + 1)
+	qnt_diplomas = random.randrange(1,len(config_resp.diplomas) + 1)
 	diploma_quotation = ""
-	random.shuffle(config.diplomas)
+	random.shuffle(config_resp.diplomas)
 	
 	for x in range(0, qnt_diplomas):
-		diploma_quotation += config.diplomas[x] + "\n"
+		diploma_quotation += "\n\n" + config_resp.diplomas[x]
 	
 	return diploma_quotation
 	
 def get_effect_phrase():
-	return config.replies[random.randrange(0,len(config.replies))]
+	return config_resp.replies[random.randrange(0,len(config_resp.replies))]
 
 def get_reply():
-	return get_effect_phrase() + "\n" + get_diplomas()
+	return get_effect_phrase() + "\n\n Meus diplomas são:" + get_diplomas()
 
-print (get_diplomas())
-#print (config.respostas[random.randrange(0,len(config.respostas))])
 
 r = bot_login()
-#while True:
-run_bot(r, load_comments())
-	#time.sleep(10)
+while True:
+	print ("Start to run...")
+	run_bot(r, load_comments())
+	time.sleep(600)
 
 					 
