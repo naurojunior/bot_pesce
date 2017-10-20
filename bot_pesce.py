@@ -18,16 +18,20 @@ def bot_login():
 def run_bot(r, comments_replied):
 	word = ""
 	
+	time.sleep(10)
 	for submission in r.subreddit('test').hot(limit=25):
 		if any(word in submission.selftext for word in config_resp.palavras_chave) and submission.id not in comments_replied:
+			time.sleep(10)
 			submission.reply(get_reply())
 			comments_replied.append(submission.id)
 			
 			with open("comments_replied.txt", "a") as fw:
 				fw.write(submission.id + ",")
 	
+	time.sleep(10)
 	for comment in r.subreddit('test').comments(limit=25):
 		if any(word in comment.body for word in config_resp.palavras_chave) and comment.id not in comments_replied and comment.author != r.user.me():
+			time.sleep(10)
 			comment.reply(get_reply())
 			comments_replied.append(comment.id)
 			
