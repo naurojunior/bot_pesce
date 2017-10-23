@@ -1,4 +1,4 @@
-palavras_chave = ["startup", "startups", "empreendedorismo"]
+palavras_chave = ["startup", "startups", "Hamburgueria", "Empreendedorismo", "empreendedorismo", "hamburgueria", "Zebeleo"]
 
 replies = ["Tudo é possível se você mergulhar de cabeça e coração", "Ser ousado é simples: é só dar um passo um pouco maior do que seu normal",
 "A empolgação supera o cansaço. A experiência depende do humor.", "Transformar coisas impossíveis em um grande e divertido jogo, com um sorriso, pode ser uma forma de provar que o impossível é possível.",

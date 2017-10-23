@@ -18,22 +18,25 @@ def bot_login():
 def run_bot(r, comments_replied):
 	word = ""
 	
-	time.sleep(10)
-	for submission in r.subreddit('test').hot(limit=25):
+	#time.sleep(10)
+	for submission in r.subreddit('brasil').new(limit=25):
 		if any(word in submission.selftext for word in config_resp.palavras_chave) and submission.id not in comments_replied:
-			time.sleep(10)
+			#time.sleep(10)
 			submission.reply(get_reply())
 			comments_replied.append(submission.id)
+			print ("Replied a submission " + submission.selftext + " \n")
 			
 			with open("comments_replied.txt", "a") as fw:
 				fw.write(submission.id + ",")
 	
-	time.sleep(10)
-	for comment in r.subreddit('test').comments(limit=25):
+	#time.sleep(10)
+	for comment in r.subreddit('brasil').comments(limit=200):
+		print ("Comentário lido" + comment.body)
 		if any(word in comment.body for word in config_resp.palavras_chave) and comment.id not in comments_replied and comment.author != r.user.me():
 			time.sleep(10)
 			comment.reply(get_reply())
 			comments_replied.append(comment.id)
+			print ("Replied a comment " + comment.body + " \n"  )
 			
 			with open("comments_replied.txt", "a") as fw:
 				fw.write(comment.id + ",")
@@ -70,6 +73,6 @@ r = bot_login()
 while True:
 	print ("Start to run...")
 	run_bot(r, load_comments())
-	time.sleep(600)
+	time.sleep(60)
 
 					 
